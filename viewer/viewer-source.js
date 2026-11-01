@@ -2,10 +2,10 @@ import { marked } from 'marked';
 import stylesheet from './viewer.css';
 import DOMPurify from 'dompurify';
 import mermaid from 'mermaid';
-import { createIcons, BookOpen, FolderOpen, Download, Files } from 'lucide';
+import { createIcons, BookOpen, FolderOpen, Download, Files, FileDown } from 'lucide';
 
-createIcons({ icons: { BookOpen, FolderOpen, Download, Files } });
-mermaid.initialize({ startOnLoad: false, securityLevel: 'strict', theme: 'neutral', flowchart: { useMaxWidth: false } });
+createIcons({ icons: { BookOpen, FolderOpen, Download, Files, FileDown } });
+mermaid.initialize({ startOnLoad: false, securityLevel: 'strict', theme: 'neutral', htmlLabels: false, flowchart: { useMaxWidth: false, htmlLabels: false } });
 const element = id => document.getElementById(id);
 let documents = [];
 let selected = null;
@@ -68,6 +68,7 @@ async function show(record) {
       if (heading.tagName === 'H3') link.className = 'sub'; element('toc').append(link);
     });
     element('export').disabled = false; element('export-all').disabled = false;
+    element('download-markdown').disabled = false;
     document.title = `${record.path} · Workflow Documents`; window.scrollTo(0, 0);
   } catch (error) { notify(`문서 표시 실패: ${error.message}`); }
 }
@@ -82,6 +83,7 @@ element('folder').addEventListener('change', async event => {
     revision++; selected = null; element('count').textContent = documents.length; element('filter').value = ''; list();
     element('toc').replaceChildren(); element('document').hidden = true; element('empty').style.display = 'flex';
     element('export').disabled = true; element('export-all').disabled = true;
+    element('download-markdown').disabled = true;
     element('status').textContent = documents.length ? `${documents.length}개 문서` : 'Markdown 문서 없음';
     if (documents.length) await show(documents[0]);
   } catch (error) { notify(`폴더 읽기 실패: ${error.message}`); }
@@ -122,3 +124,12 @@ async function exportDocuments(records) {
 }
 element('export').addEventListener('click', () => exportDocuments([selected]));
 element('export-all').addEventListener('click', () => exportDocuments([...documents]));
+
+element('download-markdown').addEventListener('click', () => {
+  if (!selected) return;
+  const url = URL.createObjectURL(new Blob([selected.text], { type: 'text/markdown;charset=utf-8' }));
+  const link = document.createElement('a');
+  link.href = url; link.download = selected.path.split('/').at(-1);
+  document.body.append(link); link.click(); link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+});
