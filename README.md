@@ -6,12 +6,14 @@
 
 ## 4단계 설계
 
-| 단계 | Skill | 설계 내용 | 결과 |
+| 단계 | Skill | 설계 내용 | 로컬 결과 경로 |
 |---|---|---|---|
-| 1 | [Workflow Interview](.github/skills/workflow-interview/SKILL.md) | Task·지식·추론·판단·예외·암묵지 | [01-workflow-interview.md](output/01-workflow-interview.md) |
-| 2 | [Execution Design](.github/skills/execution-design/SKILL.md) | 수행방식·역할·HITL·설계 이유 | [02-execution-design.md](output/02-execution-design.md) |
-| 3 | [ABCD Design](.github/skills/abcd-design/SKILL.md) | Awareness·Brain·Conduct·Derived Value와 Agent 경계 | [03-abcd-design.md](output/03-abcd-design.md) |
-| 4 | [To-Be Workflow Design](.github/skills/to-be-workflow-design/SKILL.md) | Task 순서·I/O·분기·HITL·예외·종료 | [04-to-be-workflow.md](output/04-to-be-workflow.md) |
+| 1 | [Workflow Interview](.github/skills/workflow-interview/SKILL.md) | Task·지식·추론·판단·예외·암묵지 | `output/01-workflow-interview.md` |
+| 2 | [Execution Design](.github/skills/execution-design/SKILL.md) | 수행방식·역할·HITL·설계 이유 | `output/02-execution-design.md` |
+| 3 | [ABCD Design](.github/skills/abcd-design/SKILL.md) | Awareness·Brain·Conduct·Derived Value와 Agent 경계 | `output/03-abcd-design.md` |
+| 4 | [To-Be Workflow Design](.github/skills/to-be-workflow-design/SKILL.md) | Task 순서·I/O·분기·HITL·예외·종료 | `output/04-to-be-workflow.md` |
+
+결과는 Skill 실행 시 로컬에 생성됩니다. `output/`과 내보낸 `html/`은 Git에서 제외되며 저장소를 복제해도 업무 결과는 포함되지 않습니다.
 
 수행방식은 Human, Human + AI Assist, AI + HITL, AI / Agent, Rule / System, No Change 중에서 선택합니다. 모든 Task를 AI로 전환하지 않습니다.
 
@@ -94,7 +96,7 @@ AI의 추정을 실제 판단 기준이나 암묵지로 확정하지 않습니�
 
 ## 현재 설계 사례
 
-저장된 결과는 **교육 특강 주제 센싱** 업무의 설계 사례입니다.
+다음은 **교육 특강 주제 센싱** 업무의 설계 예시입니다. 실제 결과 문서는 로컬에서 관리합니다.
 
 채널 관리 → 범위 확인 → 수집·동일 글 식별 → 자료 저장·기준 갱신 → AI 요약 → 결과 저장 → 검토 자료 제공
 
@@ -104,7 +106,18 @@ AI의 추정을 실제 판단 기준이나 암묵지로 확정하지 않습니�
 - 결과 저장 실패는 AI 재호출 없이 생성 결과만 재저장합니다.
 - 채널 삭제는 향후 수집 중단이며 기존 기록은 보존합니다.
 
-미정 사항과 다음 Task/Data 단계 전달 내용은 [To-Be Workflow 결과](output/04-to-be-workflow.md)에 있습니다.
+미정 사항과 다음 Task/Data 단계 전달 내용은 로컬 4단계 결과에 기록하며 뷰어에서 확인할 수 있습니다.
+
+## 로컬 문서 뷰어
+
+[viewer.html](viewer.html)을 Chrome 또는 Edge에서 열고 **폴더 열기**로 `output/`을 선택합니다. 문서는 각각 표시되며 검색·목차·표·Mermaid 흐름도를 지원합니다.
+
+**문서 저장** 또는 **전체 저장**을 누르고 프로젝트 폴더를 저장 위치로 선택하면 원본 폴더 밖의 `html/`에 문서별 독립 HTML을 생성합니다. 하위 폴더 구조와 문서 간 상대 링크도 유지합니다. 같은 이름의 HTML은 갱신되므로 별도 수정본은 다른 위치에 보관합니다. 폴더 저장은 File System Access API를 지원하는 Chrome/Edge가 필요합니다.
+
+- `output/`과 `html/`은 Git에서 제외됩니다. 원본 Markdown은 수정하지 않습니다.
+- 공유 시 루트의 [viewer.html](viewer.html)과 `viewer/` 폴더를 함께 전달합니다. 업무 문서는 번들에 포함되지 않습니다.
+- Markdown·보안 필터·Mermaid·아이콘은 로컬 번들에 포함됩니다. 문서 로딩·저장에 서버나 외부 전송이 필요하지 않습니다.
+- 뷰어 코드를 수정할 때만 `npm.cmd ci` 후 `npm.cmd run build`로 번들을 갱신합니다.
 
 ## 프로젝트 구조
 
@@ -125,6 +138,14 @@ output/
   03-abcd-design.md
   04-to-be-workflow.md
 README.md
+viewer.html
+viewer/
+  viewer.css
+  viewer-source.js
+  viewer-bundle.js
+html/  (로컬 HTML 내보내기, Git 제외)
+package.json
+package-lock.json
 ```
 
 이 저장소는 Skill과 설계 문서를 제공하며 앱 실행이나 패키지 설치는 필요하지 않습니다. 수집·요약 시스템은 구현하지 않았습니다. 상세 Data Schema, API, Architecture는 후속 설계 범위이며 2~4단계 Skill 실행에서는 외부 시스템·Connector를 사용하지 않습니다.

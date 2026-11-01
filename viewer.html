@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' file:; script-src 'self' file:; style-src 'self' 'unsafe-inline' file:; img-src data: blob:; connect-src 'none'; font-src 'self' file:; object-src 'none'; base-uri 'none'">
+  <title>Workflow Documents</title>
+  <link rel="stylesheet" href="viewer/viewer.css">
+  <script src="viewer/viewer-bundle.js" defer></script>
+</head>
+<body>
+  <header class="toolbar">
+    <div class="brand"><i data-lucide="book-open"></i><strong>Workflow Documents</strong></div>
+    <div class="actions">
+      <button id="open" title="Markdown 폴더 열기"><i data-lucide="folder-open"></i><span>폴더 열기</span></button>
+      <button id="export" disabled title="선택 문서 HTML 저장"><i data-lucide="download"></i><span>문서 저장</span></button>
+      <button id="export-all" disabled title="전체 문서 HTML 저장"><i data-lucide="files"></i><span>전체 저장</span></button>
+    </div>
+    <input id="folder" type="file" webkitdirectory multiple hidden>
+  </header>
+  <div class="workspace">
+    <aside class="sidebar"><div class="section-label">DOCUMENTS <span id="count">0</span></div><input id="filter" type="search" placeholder="문서 검색" aria-label="문서 검색"><nav id="files" aria-label="문서 목록"></nav></aside>
+    <main id="main"><div id="empty"><i data-lucide="folder-open"></i><h1>Workflow Documents</h1><p id="status" role="status">선택된 폴더 없음</p></div><article id="document" hidden></article></main>
+    <aside class="outline"><div class="section-label">CONTENTS</div><nav id="toc" aria-label="문서 목차"></nav></aside>
+  </div>
+  <div id="notice" role="status" aria-live="polite"></div>
+</body>
+</html>
